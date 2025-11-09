@@ -1,43 +1,29 @@
+import { BrowserRouter, Route, Routes } from "react-router";
+import { CampgroundsPage, LandingPage, Layout } from "@/pages";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-import { BrowserRouter, Routes, Route } from "react-router";
-
-import Layout from "@/layout/Layout";
-
-import { TailwindIndicator } from "@/components/tailwind-indicator";
-
-import Login from "@/pages/Login";
-import Signup from "@/pages/Signup";
-
-import { SessionProvider } from "@/contexts/AuthProvider";
 import { queryClient } from "@/config/queryClient";
-import AuthGuard from "./components/AuthGuard";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { TailwindIndicator } from "@/components/TailwindIndicator";
+import { SessionProvider } from "@/contexts/SessionProvider";
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <TailwindIndicator />
+      <ReactQueryDevtools initialIsOpen={false} />
       <SessionProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route path="login" index element={<Login />} />
-              <Route path="signup" element={<Signup />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/campgrounds" element={<Layout />}>
+              <Route index element={<CampgroundsPage />} />
+              <Route path=":id" element={<h1>dynamic</h1>} />
             </Route>
-            <Route
-              path="protected"
-              element={
-                <AuthGuard>
-                  <div>Protected</div>
-                </AuthGuard>
-              }
-            />
           </Routes>
         </BrowserRouter>
-        <TailwindIndicator />
-        <ReactQueryDevtools initialIsOpen={false} />
       </SessionProvider>
     </QueryClientProvider>
   );
 }
+
 export default App;

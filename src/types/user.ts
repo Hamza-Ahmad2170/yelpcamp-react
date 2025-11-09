@@ -1,7 +1,8 @@
-type User = {
-  _id: string;
+interface User {
+  id: string;
   email: string;
-  fullName: string;
-};
+  firstName: string;
+  lastName: string;
+}
 
 export type { User };

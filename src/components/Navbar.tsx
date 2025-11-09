@@ -1,30 +1,41 @@
 import { Link } from "react-router";
+import Logo from "@/assets/icon/logo.svg?react";
+import Container from "@/components/Container";
+import { Button } from "@/components/ui/button";
+import LoginForm from "@/components/form/loginForm";
 
-export default function Navbar() {
+function Navbar() {
   return (
-    <nav className="border-b border-b-gray-300 bg-white shadow-2xl">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        {/* Brand */}
-        <Link to="/" className="text-xl font-bold text-blue-600">
-          MyApp
-        </Link>
+    <header className="sticky top-0 z-50 min-h-16 content-center bg-white shadow-lg">
+      <Container className="flex items-center justify-between">
+        <nav>
+          <Link to="/" className="flex items-center gap-2">
+            <Logo className="text-forest-600 size-6" />
+            <span className="text-forest-700 text-2xl font-bold">YelpCamp</span>
+          </Link>
+          <ul>
+            <li>{/* links will be added here */}</li>
+          </ul>
+        </nav>
 
-        {/* Links */}
-        <div className="flex items-center space-x-4">
-          <Link
-            to="/login"
-            className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+        <div className="space-x-4">
+          {/* <a
+            className="text-forest-700 hover:text-forest-500 font-medium transition-colors"
+            href="#"
           >
             Login
-          </Link>
-          <Link
-            to="/signup"
-            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          </a> */}
+          <LoginForm />
+
+          <Button
+            className="h-auto rounded-lg px-4 py-2 text-base font-medium"
+            variant="forest"
           >
             Sign Up
-          </Link>
+          </Button>
         </div>
-      </div>
-    </nav>
+      </Container>
+    </header>
   );
 }
+export default Navbar;

@@ -1,25 +1,19 @@
 import axios, { AxiosError } from "axios";
-import { auth } from "@/api/auth/index";
+import { authService } from "@/api/services";
 import { queryClient } from "@/config/queryClient";
 
 import { tokenManager } from "./tokenManager";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
-const publicAxios = axios.create({
+const api = axios.create({
   baseURL,
-  timeout: 15000,
-});
-
-const privateAxios = axios.create({
-  baseURL,
-  withCredentials: true,
-  timeout: 15000,
 });
 
 // This runs BEFORE every request and adds the token
-privateAxios.interceptors.request.use(
+api.interceptors.request.use(
   (config) => {
+    if (config.skipAuth) return config;
     const token = tokenManager.getToken();
     if (token) {
       // Attach token to every request automatically
@@ -32,12 +26,13 @@ privateAxios.interceptors.request.use(
 );
 
 // This runs AFTER every response and handles token rotation
-privateAxios.interceptors.response.use(
+api.interceptors.response.use(
   // If response is successful, just pass it through
   (response) => response,
   async (error) => {
     // If response fails, this is where token rotation happens
     const originalRequest = error.config;
+    if (originalRequest?.skipAuth) throw error;
 
     // Check: Is this a 401 (unauthorized) error?
     // And have we already tried to fix this request?
@@ -53,8 +48,8 @@ privateAxios.interceptors.response.use(
           tokenManager.setIsRefreshing(true);
 
           // Call your refresh endpoint
-          const response = await auth.refresh();
-          newToken = response.accessToken;
+          const response = await authService.refresh();
+          newToken = response.data.data.accessToken;
 
           // Store the new token
           tokenManager.setToken(newToken);
@@ -65,16 +60,17 @@ privateAxios.interceptors.response.use(
 
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
-        return privateAxios(originalRequest);
+        return api(originalRequest);
       } catch (refreshError) {
         // Refresh failed - notify everyone waiting and clear everything
         tokenManager.processQueueFailure(refreshError as AxiosError);
         tokenManager.clearToken();
 
-        // Usually you'd redirect to login here
-        queryClient.removeQueries({
+        queryClient.invalidateQueries({
           queryKey: ["auth"],
+          refetchType: "none",
         });
+
         throw refreshError;
       }
     }
@@ -82,4 +78,4 @@ privateAxios.interceptors.response.use(
   },
 );
 
-export { publicAxios, privateAxios };
+export { api };

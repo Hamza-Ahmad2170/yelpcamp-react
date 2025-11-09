@@ -1,0 +1,11 @@
+import { api } from "@/api/axios/api";
+import { endpoints } from "@/api/endpoints";
+import type { ApiResponse } from "../types";
+import type { User } from "@/types";
+
+export const userService = {
+  getCurrentUser: async () => {
+    const response = await api.get<ApiResponse<User>>(endpoints.users.me);
+    return response.data;
+  },
+};

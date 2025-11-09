@@ -1,12 +1,13 @@
-import * as React from "react";
-
+// src/svg.d.ts
 declare module "*.svg" {
-  // React component export (SVGR)
-  export const ReactComponent: React.FC<
-    React.SVGProps<SVGSVGElement> & { title?: string }
-  >;
-
-  // Default export: URL string (for <img src="..." />)
+  import React from "react";
+  export const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
   const src: string;
   export default src;
+}
+
+declare module "*.svg?react" {
+  import React from "react";
+  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
+  export default ReactComponent;
 }

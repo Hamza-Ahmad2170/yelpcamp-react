@@ -1,12 +1,12 @@
-import { SessionContext } from "@/contexts/AuthProvider";
 import { use } from "react";
+import { CurrentUserContext } from "@/contexts/SessionProvider";
 
-function useSession() {
-  const context = use(SessionContext);
-  if (!context) {
-    throw Error("useSession must be used within an SessionProvider");
+const useSession = () => {
+  const currentUserContext = use(CurrentUserContext);
+  if (!currentUserContext) {
+    throw new Error("useSession must be used within a SessionProvider");
   }
-  return context;
-}
+  return currentUserContext;
+};
 
-export default useSession;
+export { useSession };
