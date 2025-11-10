@@ -14,7 +14,7 @@ function CampgroundsPage() {
   console.log(data);
 
   return (
-    <section className="mx-auto grid max-w-7xl grid-cols-3 gap-8 px-4 lg:px-8">
+    <section className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-3 lg:px-8">
       {data.campgrounds.map((campground) => (
         <CampgroundCard key={campground.id} campground={campground} />
       ))}

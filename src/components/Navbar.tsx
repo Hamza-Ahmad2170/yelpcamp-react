@@ -4,8 +4,10 @@ import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
 import LoginForm from "@/components/form/LoginForm";
 import { Skeleton } from "./ui/skeleton";
+import { useSession } from "@/hooks/useSession";
 
 function Navbar() {
+  const { user, isLoading, error } = useSession();
   return (
     <header className="sticky top-0 z-50 min-h-16 content-center bg-white shadow-lg">
       <Container className="flex items-center justify-between">
@@ -19,7 +21,16 @@ function Navbar() {
           </ul>
         </nav>
         <div className="flex gap-4">
-          <LoginForm />
+          {!isLoading && error && <LoginForm />}
+          {!isLoading && !error && user && (
+            <Button
+              className="h-auto rounded-lg px-4 py-2 text-base font-medium"
+              variant="forest"
+            >
+              Logout
+            </Button>
+          )}
+          {isLoading && "Loading..."}
           {/* <Skeleton className="h-10 w-32 bg-gray-200" /> */}
         </div>
       </Container>

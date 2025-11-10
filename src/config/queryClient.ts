@@ -8,6 +8,7 @@ export const queryClient = new QueryClient({
         error instanceof AxiosError && error.response?.status === 401
           ? false
           : failureCount < 1,
+      staleTime: 1000 * 60 * 15, // 15 minutes
     },
     mutations: {
       retry: (failureCount, error: unknown) =>

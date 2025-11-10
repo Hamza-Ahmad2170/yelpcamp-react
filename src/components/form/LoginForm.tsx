@@ -21,15 +21,22 @@ import { X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type Login } from "@/schema/user";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "@/api/services";
 import { tokenManager } from "@/api/axios/tokenManager";
+import { useSession } from "@/hooks/useSession";
+import { useState } from "react";
 
 function LoginForm() {
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
   const { mutate, isPending } = useMutation({
     mutationFn: (values: Login) => authService.login(values),
     onSuccess: ({ data }) => {
       tokenManager.setToken(data.data.accessToken);
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
+      setIsOpen(false);
     },
     onError: () => {
       console.log("error");
@@ -46,8 +53,10 @@ function LoginForm() {
 
   const onSubmit = (data: Login) => mutate(data);
 
+  // const { user, isLoading, error } = useSession();
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>Open</DialogTrigger>
       <DialogContent
         className="w-full shadow-2xl sm:max-w-md"
@@ -55,9 +64,7 @@ function LoginForm() {
       >
         <DialogHeader>
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-semibold">
-              Welcome Back!
-            </DialogTitle>
+            <DialogTitle className="text-xl">Welcome Back!</DialogTitle>
             <DialogClose asChild>
               <X className="size-5 cursor-pointer text-gray-400 transition-colors hover:text-gray-600" />
             </DialogClose>

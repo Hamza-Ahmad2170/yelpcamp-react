@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-import { CampgroundsPage, LandingPage, Layout } from "@/pages";
+import { CampgroundsPage, LandingPage, Layout, LoginPage } from "@/pages";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/config/queryClient";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -15,7 +15,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/campgrounds" element={<Layout />}>
+            <Route element={<Layout />}>
+              <Route path="/login" element={<LoginPage />} />
               <Route index element={<CampgroundsPage />} />
               <Route path=":id" element={<h1>dynamic</h1>} />
             </Route>
