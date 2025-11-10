@@ -10,7 +10,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TailwindIndicator />
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools />
       <SessionProvider>
         <BrowserRouter>
           <Routes>

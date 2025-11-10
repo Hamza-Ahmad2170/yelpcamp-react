@@ -56,6 +56,8 @@
   --color-forest-700: var(--forest-700);
   --color-forest-800: var(--forest-800);
   --color-forest-900: var(--forest-900);
+
+  --default-font-family: var(--font-sans);
 }
 
 :root {
@@ -108,6 +110,8 @@
   --forest-700: oklch(0.3444 0.0623 149.56);
   --forest-800: oklch(0.275 0.0476 148.07);
   --forest-900: oklch(0.2204 0.0334 149.05);
+
+  --font-sans: "Inter", sans-serif;
 }
 
 .dark {

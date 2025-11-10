@@ -6,26 +6,26 @@ import { createContext } from "react";
 type CurrentUserContextType = {
   user: User | undefined;
   isLoading: boolean;
+  error: Error | null;
 };
-
-interface Props {
-  children: React.ReactNode;
-}
 
 const CurrentUserContext = createContext<CurrentUserContextType | null>(null);
 
-function SessionProvider({ children }: Props) {
-  const { data, isLoading } = useQuery({
+function SessionProvider({ children }: React.PropsWithChildren) {
+  const { data, isPending, error } = useQuery({
     queryKey: ["auth", "me"],
     queryFn: userService.getCurrentUser,
     select: (data) => data.data,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
   });
 
   return (
     <CurrentUserContext
       value={{
         user: data,
-        isLoading,
+        isLoading: isPending,
+        error,
       }}
     >
       {children}

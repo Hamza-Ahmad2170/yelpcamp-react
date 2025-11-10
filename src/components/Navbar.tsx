@@ -2,7 +2,8 @@ import { Link } from "react-router";
 import Logo from "@/assets/icon/logo.svg?react";
 import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
-import LoginForm from "@/components/form/loginForm";
+import LoginForm from "@/components/form/LoginForm";
+import { Skeleton } from "./ui/skeleton";
 
 function Navbar() {
   return (
@@ -17,25 +18,32 @@ function Navbar() {
             <li>{/* links will be added here */}</li>
           </ul>
         </nav>
-
-        <div className="space-x-4">
-          {/* <a
-            className="text-forest-700 hover:text-forest-500 font-medium transition-colors"
-            href="#"
-          >
-            Login
-          </a> */}
+        <div className="flex gap-4">
           <LoginForm />
-
-          <Button
-            className="h-auto rounded-lg px-4 py-2 text-base font-medium"
-            variant="forest"
-          >
-            Sign Up
-          </Button>
+          {/* <Skeleton className="h-10 w-32 bg-gray-200" /> */}
         </div>
       </Container>
     </header>
   );
 }
+
 export default Navbar;
+
+{
+  /* <div className="space-x-4">
+ <a
+            className="text-forest-700 hover:text-forest-500 font-medium transition-colors"
+            href="#"
+          >
+            Login
+          </a> 
+  <LoginForm />
+
+  <Button
+    className="h-auto rounded-lg px-4 py-2 text-base font-medium"
+    variant="forest"
+  >
+    Sign Up
+  </Button>
+</div>; */
+}

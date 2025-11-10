@@ -4,7 +4,7 @@ import type { ApiResponse } from "../types";
 import type { Auth } from "@/types";
 
 export const authService = {
-  login: async (email: string, password: string) => {
+  login: async ({ email, password }: { email: string; password: string }) => {
     return await api.post<ApiResponse<Auth>>(
       endpoints.auth.login,
       {

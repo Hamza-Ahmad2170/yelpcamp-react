@@ -12,47 +12,115 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
+  DialogClose,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import InputPassword from "@/components/ui/InputPassword";
-
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type Login } from "@/schema/user";
+import { useMutation } from "@tanstack/react-query";
+import { authService } from "@/api/services";
+import { tokenManager } from "@/api/axios/tokenManager";
 
 function LoginForm() {
+  const { mutate, isPending } = useMutation({
+    mutationFn: (values: Login) => authService.login(values),
+    onSuccess: ({ data }) => {
+      tokenManager.setToken(data.data.accessToken);
+    },
+    onError: () => {
+      console.log("error");
+    },
+  });
+
+  const form = useForm<Login>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (data: Login) => mutate(data);
+
   return (
     <Dialog>
-      <form>
-        <DialogTrigger>Open</DialogTrigger>
-        <DialogContent className="w-full shadow-2xl sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold">
+      <DialogTrigger>Open</DialogTrigger>
+      <DialogContent
+        className="w-full shadow-2xl sm:max-w-md"
+        showCloseButton={false}
+      >
+        <DialogHeader>
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-xl font-semibold">
               Welcome Back!
             </DialogTitle>
-            <Separator className="my-4" />
-            <DialogDescription>
-              Log in to continue your adventure.
-            </DialogDescription>
-          </DialogHeader>
+            <DialogClose asChild>
+              <X className="size-5 cursor-pointer text-gray-400 transition-colors hover:text-gray-600" />
+            </DialogClose>
+          </div>
+
+          <DialogDescription>
+            Log in to continue your adventure.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="email">Email</FieldLabel>
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                id="email"
-                name="email"
-              />
-              <FieldError />
-            </Field>
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    id={field.name}
+                    {...field}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
           </FieldGroup>
           <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="password">Password</FieldLabel>
-              <InputPassword id="password" name="password" />
-              <FieldError />
-            </Field>
+            <Controller
+              control={form.control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                  <InputPassword
+                    placeholder="Enter your password"
+                    id={field.name}
+                    {...field}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
           </FieldGroup>
-        </DialogContent>
-      </form>
+          <DialogFooter>
+            <Button
+              variant="forest"
+              type="submit"
+              className="w-full"
+              disabled={isPending}
+            >
+              Login
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
     </Dialog>
   );
 }

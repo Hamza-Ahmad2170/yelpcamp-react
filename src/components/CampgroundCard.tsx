@@ -1,4 +1,4 @@
-import type { Campground } from "@/api/services/campground/campground.types";
+import type { Campground } from "@/types";
 import { Badge } from "./ui/badge";
 import { Star } from "lucide-react";
 import LocationPin from "@/assets/icon/location-pin.svg?react";
@@ -11,7 +11,7 @@ interface Props {
 
 function CampgroundCard({ campground }: Props) {
   return (
-    <div className="grid grid-rows-[auto_1fr] overflow-hidden rounded-2xl bg-white shadow-lg transition-shadow hover:shadow-2xl">
+    <div className="grid grid-rows-[auto_1fr] overflow-hidden rounded-2xl bg-white shadow-lg transition-[shadow_transform] duration-300 ease-in-out hover:scale-105 hover:shadow-2xl">
       <div className="relative">
         <img
           src={campground.imageUrl}

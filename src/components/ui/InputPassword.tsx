@@ -5,7 +5,9 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const InputPassword = ({ ...props }: React.ComponentProps<"input">) => {
+const InputPassword = ({
+  ...props
+}: Omit<React.ComponentProps<"input">, "type">) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const id = useId();
@@ -21,6 +23,7 @@ const InputPassword = ({ ...props }: React.ComponentProps<"input">) => {
       <Button
         variant="ghost"
         size="icon"
+        type="button"
         onClick={() => setIsVisible((prevState) => !prevState)}
         className="text-muted-foreground focus-visible:ring-ring/50 absolute inset-y-0 right-0 rounded-l-none hover:bg-transparent"
       >
