@@ -16,8 +16,8 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route element={<Layout />}>
+              <Route path="campgrounds" element={<CampgroundsPage />} />
               <Route path="/login" element={<LoginPage />} />
-              <Route index element={<CampgroundsPage />} />
               <Route path=":id" element={<h1>dynamic</h1>} />
             </Route>
           </Routes>

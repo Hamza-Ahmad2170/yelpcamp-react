@@ -1,5 +1,8 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Navigate, useLocation, useNavigate } from "react-router";
+import { isAxiosError } from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import {
   Field,
@@ -11,8 +14,16 @@ import { Input } from "@/components/ui/input";
 import InputPassword from "@/components/ui/InputPassword";
 import { loginSchema, type Login } from "@/schema/user";
 import { Button } from "@/components/ui/button";
+import { authService } from "@/api/services";
+import { tokenManager } from "@/api/axios/tokenManager";
+import { toast } from "sonner";
+import { useSession } from "@/hooks/useSession";
 
 export function LoginPage() {
+  const { user, isLoading } = useSession();
+  const navigate = useNavigate();
+  // const location = useLocation();
+
   const form = useForm<Login>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -21,7 +32,25 @@ export function LoginPage() {
     },
   });
 
-  // const onSubmit = (data: Login) => mutate(data);
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (values: Login) => authService.login(values),
+    onSuccess: ({ data }) => {
+      tokenManager.setToken(data.data.accessToken);
+      queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
+      navigate("/campgrounds", { replace: true });
+    },
+    onError: (error) => {
+      if (isAxiosError(error))
+        toast.error(error.response?.data?.message || "something went wrong");
+      form.reset();
+    },
+  });
+
+  if (user && !isLoading) return <Navigate to="/campgrounds" replace />;
+
+  const onSubmit = (data: Login) => mutate(data);
 
   return (
     <div>
@@ -34,7 +63,7 @@ export function LoginPage() {
             <p className="text-muted-foreground text-center">
               Log in to continue your adventure.
             </p>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
               <FieldGroup>
                 <Controller
                   control={form.control}
@@ -80,7 +109,7 @@ export function LoginPage() {
                 variant="forest"
                 type="submit"
                 className="w-full"
-                // disabled={isPending}
+                disabled={isPending}
               >
                 Login
               </Button>
