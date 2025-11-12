@@ -1,10 +1,15 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-import { CampgroundsPage, LandingPage, Layout, LoginPage } from "@/pages";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/config/queryClient";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { TailwindIndicator } from "@/components/TailwindIndicator";
 import { SessionProvider } from "@/contexts/SessionProvider";
+
+import LandingPage from "@/pages/LandingPage";
+import CampgroundsPage from "@/pages/CampgroundsPage";
+import LoginPage from "@/pages/LoginPage";
+import Layout from "@/pages/Layout";
+import RegisterPage from "@/pages/RegisterPage";
 
 function App() {
   return (
@@ -18,6 +23,7 @@ function App() {
             <Route element={<Layout />}>
               <Route path="campgrounds" element={<CampgroundsPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
               <Route path=":id" element={<h1>dynamic</h1>} />
             </Route>
           </Routes>

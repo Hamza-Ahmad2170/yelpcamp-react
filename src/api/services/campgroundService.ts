@@ -5,13 +5,11 @@ import type { Campground } from "@/types";
 
 export const campgroundService = {
   getAllCampgrounds: async (limit?: number, page?: number) => {
-    const response = await api.get<
+    return await api.get<
       ApiResponse<PaginatedData & { campgrounds: Campground[] }>
     >(endpoints.campgrounds.all(limit, page));
-    return response.data;
   },
   getCampgroundById: async (id: string) => {
-    const response = await api.get(endpoints.campgrounds.single(id));
-    return response.data;
+    return await api.get(endpoints.campgrounds.single(id));
   },
 };

@@ -1,8 +1,12 @@
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Navigate, useLocation, useNavigate } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 import { isAxiosError } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+import { authService } from "@/api/services";
+import { tokenManager } from "@/api/axios/tokenManager";
 
 import {
   Field,
@@ -14,12 +18,9 @@ import { Input } from "@/components/ui/input";
 import InputPassword from "@/components/ui/InputPassword";
 import { loginSchema, type Login } from "@/schema/user";
 import { Button } from "@/components/ui/button";
-import { authService } from "@/api/services";
-import { tokenManager } from "@/api/axios/tokenManager";
-import { toast } from "sonner";
 import { useSession } from "@/hooks/useSession";
 
-export function LoginPage() {
+function LoginPage() {
   const { user, isLoading } = useSession();
   const navigate = useNavigate();
   // const location = useLocation();
@@ -50,73 +51,77 @@ export function LoginPage() {
 
   if (user && !isLoading) return <Navigate to="/campgrounds" replace />;
 
-  const onSubmit = (data: Login) => mutate(data);
+  const onSubmit: SubmitHandler<Login> = (data) => mutate(data);
 
   return (
-    <div>
-      <div className="min-h-[calc(100dvh-64px)] content-center">
-        <div className="mx-auto w-full max-w-md rounded-2xl p-8 shadow-2xl backdrop-blur">
-          <div className="space-y-3">
-            <h1 className="text-center text-2xl font-semibold">
-              Welcome Back!
-            </h1>
-            <p className="text-muted-foreground text-center">
-              Log in to continue your adventure.
-            </p>
-            <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-              <FieldGroup>
-                <Controller
-                  control={form.control}
-                  name="email"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                      <Input
-                        type="email"
-                        placeholder="Enter your email"
-                        id={field.name}
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
+    <div className="min-h-[calc(100dvh-64px)] content-center">
+      <div className="mx-auto w-full max-w-md space-y-3 rounded-2xl p-8 shadow-2xl">
+        <h1 className="text-center text-2xl font-semibold">Welcome Back!</h1>
+        <p className="text-muted-foreground text-center">
+          Log in to continue your adventure.
+        </p>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup className="gap-5">
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                  <Input
+                    type="email"
+                    placeholder="Enter your email"
+                    id={field.name}
+                    {...field}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
                   )}
-                />
-              </FieldGroup>
-              <FieldGroup>
-                <Controller
-                  control={form.control}
-                  name="password"
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                      <InputPassword
-                        placeholder="Enter your password"
-                        id={field.name}
-                        {...field}
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
+                </Field>
+              )}
+            />
+
+            <Controller
+              control={form.control}
+              name="password"
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                  <InputPassword
+                    placeholder="Enter your password"
+                    id={field.name}
+                    {...field}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
                   )}
-                />
-              </FieldGroup>
-              <Button
-                variant="forest"
-                type="submit"
-                className="w-full"
-                disabled={isPending}
-              >
-                Login
-              </Button>
-            </form>
-          </div>
-        </div>
+                </Field>
+              )}
+            />
+            <Button
+              variant="forest"
+              type="submit"
+              className="w-full"
+              disabled={isPending}
+            >
+              Log in
+            </Button>
+          </FieldGroup>
+        </form>
+        <p className="text-muted-foreground mt-6 text-center text-xs">
+          Don"t have an account?{" "}
+          <Link
+            to="/login"
+            className="font-medium text-green-500 hover:underline"
+          >
+            Sign up
+          </Link>
+        </p>
       </div>
     </div>
   );
 }
+
+export default LoginPage;

@@ -18,4 +18,4 @@ function LandingPage() {
     </main>
   );
 }
-export { LandingPage };
+export default LandingPage;

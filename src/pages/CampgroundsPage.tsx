@@ -21,4 +21,4 @@ function CampgroundsPage() {
     </section>
   );
 }
-export { CampgroundsPage };
+export default CampgroundsPage;

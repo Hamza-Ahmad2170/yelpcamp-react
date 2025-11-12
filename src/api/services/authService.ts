@@ -2,14 +2,14 @@ import { api } from "@/api/axios/api";
 import { endpoints } from "@/api/endpoints";
 import type { ApiResponse } from "../types";
 import type { Auth } from "@/types";
+import type { Login, SignUp } from "@/schema/user";
 
 export const authService = {
-  login: async ({ email, password }: { email: string; password: string }) => {
+  login: async (formData: Login) => {
     return await api.post<ApiResponse<Auth>>(
       endpoints.auth.login,
       {
-        email,
-        password,
+        ...formData,
       },
       {
         skipAuth: true,
@@ -17,14 +17,14 @@ export const authService = {
       },
     );
   },
-  signup: async (email: string, password: string) => {
+  signup: async (formData: SignUp) => {
     return await api.post<ApiResponse<Auth>>(
       endpoints.auth.signup,
       {
-        email,
-        password,
+        ...formData,
       },
       {
+        skipAuth: true,
         withCredentials: true,
       },
     );
