@@ -49,7 +49,7 @@ api.interceptors.response.use(
 
           // Call your refresh endpoint
           const response = await authService.refresh();
-          newToken = response.data.data.accessToken;
+          newToken = response.data.accessToken;
 
           // Store the new token
           tokenManager.setToken(newToken);

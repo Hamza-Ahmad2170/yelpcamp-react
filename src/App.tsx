@@ -10,6 +10,7 @@ import CampgroundsPage from "@/pages/CampgroundsPage";
 import LoginPage from "@/pages/LoginPage";
 import Layout from "@/pages/Layout";
 import RegisterPage from "@/pages/RegisterPage";
+import RequireAuth from "@/components/RequireAuth";
 
 function App() {
   return (
@@ -21,10 +22,20 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route element={<Layout />}>
-              <Route path="campgrounds" element={<CampgroundsPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path=":id" element={<h1>dynamic</h1>} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
+              <Route path="campgrounds">
+                <Route index element={<CampgroundsPage />} />
+                <Route
+                  path="new"
+                  element={
+                    <RequireAuth>
+                      <h1>protected</h1>
+                    </RequireAuth>
+                  }
+                />
+                <Route path=":id" element={<h1>dynamic</h1>} />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>

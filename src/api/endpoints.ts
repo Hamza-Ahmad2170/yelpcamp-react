@@ -3,6 +3,7 @@ export const endpoints = {
     login: `/auth/login`,
     signup: `/auth/signup`,
     refresh: `/auth/refresh`,
+    logout: `/auth/logout`,
   },
   campgrounds: {
     all: (limit = 10, page = 1) => `/campgrounds?limit=${limit}&page=${page}`,

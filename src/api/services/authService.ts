@@ -6,7 +6,7 @@ import type { Login, SignUp } from "@/schema/user";
 
 export const authService = {
   login: async (formData: Login) => {
-    return await api.post<ApiResponse<Auth>>(
+    const res = await api.post<ApiResponse<Auth>>(
       endpoints.auth.login,
       {
         ...formData,
@@ -16,9 +16,10 @@ export const authService = {
         withCredentials: true,
       },
     );
+    return res.data;
   },
   signup: async (formData: SignUp) => {
-    return await api.post<ApiResponse<Auth>>(
+    const resp = await api.post<ApiResponse<Auth>>(
       endpoints.auth.signup,
       {
         ...formData,
@@ -28,12 +29,22 @@ export const authService = {
         withCredentials: true,
       },
     );
+    return resp.data;
   },
   refresh: async () => {
-    return await api.post<ApiResponse<Auth>>(
+    const resp = await api.post<ApiResponse<Auth>>(
       endpoints.auth.refresh,
       {},
       { skipAuth: true, withCredentials: true },
     );
+    return resp.data;
+  },
+  logout: async () => {
+    const resp = await api.post<ApiResponse<Auth>>(
+      endpoints.auth.logout,
+      {},
+      { withCredentials: true },
+    );
+    return resp.data;
   },
 };

@@ -38,7 +38,7 @@ function LoginPage() {
   const { mutate, isPending } = useMutation({
     mutationFn: (values: Login) => authService.login(values),
     onSuccess: ({ data }) => {
-      tokenManager.setToken(data.data.accessToken);
+      tokenManager.setToken(data.accessToken);
       queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
       navigate("/campgrounds", { replace: true });
     },

@@ -1,14 +1,16 @@
 import { Link } from "react-router";
 import Logo from "@/assets/icon/logo.svg?react";
 import Container from "@/components/Container";
-import { Button } from "@/components/ui/button";
 
 import { Skeleton } from "./ui/skeleton";
 import { useSession } from "@/hooks/useSession";
 import type { User } from "@/types";
+import Logout from "./Logout";
+import { Button } from "./ui/button";
 
 function Navbar() {
   const { user, isLoading } = useSession();
+  console.log({ user });
   return (
     <header className="sticky top-0 z-50 min-h-16 content-center bg-white shadow-lg">
       <Container className="flex items-center justify-between">
@@ -41,12 +43,7 @@ function UserInfo({ user }: { user: User }) {
       <span>
         {user?.firstName} {user?.lastName}
       </span>
-      <Button
-        className="h-auto rounded-lg px-4 py-2 text-base font-medium"
-        variant="forest"
-      >
-        Logout
-      </Button>
+      <Logout />
     </div>
   );
 }
@@ -60,7 +57,6 @@ function AuthButtons() {
       >
         Login
       </Link>
-
       <Button
         className="h-auto rounded-lg px-4 py-2 text-base font-medium"
         variant="forest"
