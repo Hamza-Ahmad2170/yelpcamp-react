@@ -15,15 +15,15 @@ function SessionProvider({ children }: React.PropsWithChildren) {
   const { data, isPending, error } = useQuery({
     queryKey: ["auth", "me"],
     queryFn: userService.getCurrentUser,
-    select: (data) => data.data,
-    staleTime: Infinity,
+    // select: (data) => data.data,
+    // staleTime: Infinity,
     refetchOnWindowFocus: false,
   });
 
   return (
     <CurrentUserContext
       value={{
-        user: data,
+        user: data?.data,
         isLoading: isPending,
         error,
       }}

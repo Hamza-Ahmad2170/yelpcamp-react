@@ -55,7 +55,7 @@ function LoginPage() {
 
   return (
     <div className="min-h-[calc(100dvh-64px)] content-center">
-      <div className="mx-auto w-full max-w-md space-y-3 rounded-2xl p-8 shadow-2xl">
+      <div className="mx-auto w-full max-w-sm space-y-3 rounded-2xl p-8 shadow-2xl">
         <h1 className="text-center text-2xl font-semibold">Welcome Back!</h1>
         <p className="text-muted-foreground text-center">
           Log in to continue your adventure.
@@ -113,7 +113,7 @@ function LoginPage() {
         <p className="text-muted-foreground mt-6 text-center text-xs">
           Don"t have an account?{" "}
           <Link
-            to="/login"
+            to="/register"
             className="font-medium text-green-500 hover:underline"
           >
             Sign up

@@ -9,10 +9,8 @@ export default function Logout() {
   const { isPending, mutate } = useMutation({
     mutationFn: authService.logout,
     onSuccess: () => {
-      queryClient.removeQueries({
-        queryKey: ["auth", "me"],
-      });
       tokenManager.clearToken();
+      queryClient.resetQueries({ queryKey: ["auth"] });
     },
   });
 

@@ -6,7 +6,6 @@ import { Delay } from "@/lib/utils";
 
 export const userService = {
   getCurrentUser: async () => {
-    // await Delay(5000);
     const resp = await api.get<ApiResponse<User>>(endpoints.users.me);
     return resp.data;
   },
